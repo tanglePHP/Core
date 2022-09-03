@@ -622,4 +622,40 @@ final class Converter {
   static public function serializeFixedHex(string $value): string {
     return hex2bin($value);
   }
+
+  /**
+   * @param string $plaintext
+   * @param string $password
+   * @param string $method
+   *
+   * @return string
+   */
+  static function encrypt(string $plaintext, string $password, string $method = 'AES-256-CBC'): string {
+    $key        = hash('sha256', $password, true);
+    $iv         = openssl_random_pseudo_bytes(16);
+    $ciphertext = openssl_encrypt($plaintext, $method, $key, OPENSSL_RAW_DATA, $iv);
+    $hash       = hash_hmac('sha256', $ciphertext . $iv, $key, true);
+
+    return base64_encode($iv . $hash . $ciphertext);
+  }
+
+  /**
+   * @param string $encryptedText
+   * @param string $password
+   * @param string $method
+   *
+   * @return string|false|null
+   */
+  static function decrypt(string $encryptedText, string $password, string $method = 'AES-256-CBC'): string|null|false {
+    $encryptedText = base64_decode($encryptedText);
+    $iv            = substr($encryptedText, 0, 16);
+    $hash          = substr($encryptedText, 16, 32);
+    $ciphertext    = substr($encryptedText, 48);
+    $key           = hash('sha256', $password, true);
+    if(!hash_equals(hash_hmac('sha256', $ciphertext . $iv, $key, true), $hash)) {
+      return null;
+    }
+
+    return openssl_decrypt($ciphertext, $method, $key, OPENSSL_RAW_DATA, $iv);
+  }
 }
