@@ -68,46 +68,46 @@ final class Hash {
   }
 
   /**
-   * @param bool $_binary
+   * @param bool $binary
    *
    * @return string
    */
-  public function digest(bool $_binary = false): string {
+  public function digest(bool $binary = false): string {
     $this->_isFinal = true;
 
-    return hash_final($this->_handle, $_binary);
+    return hash_final($this->_handle, $binary);
   }
 
   /**
-   * @param string|null $_key
+   * @param string|null $key
    * @param int|null    $HMAC
    *
    * @return hash
    * @throws HelperException
    */
-  static public function sha512(string $_key = null, int $HMAC = null): Hash {
-    return new Hash("sha512", $_key, $HMAC);
+  static public function sha512(string $key = null, int $HMAC = null): Hash {
+    return new Hash("sha512", $key, $HMAC);
   }
 
   /**
-   * @param string|null $_key
+   * @param string|null $key
    *
    * @return hash
    * @throws HelperException
    */
-  static public function hmacSha512(string $_key = null): Hash {
-    return self::sha512($_key, HASH_HMAC);
+  static public function hmacSha512(string $key = null): Hash {
+    return self::sha512($key, HASH_HMAC);
   }
 
   /**
-   * @param string|null $_key
+   * @param string|null $key
    * @param int|null    $HMAC
    *
    * @return hash
    * @throws HelperException
    */
-  static public function sha256(string $_key = null, int $HMAC = null): Hash {
-    return new Hash("sha256", $_key, $HMAC);
+  static public function sha256(string $key = null, int $HMAC = null): Hash {
+    return new Hash("sha256", $key, $HMAC);
   }
 
   /**
