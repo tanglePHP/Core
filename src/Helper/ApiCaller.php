@@ -9,7 +9,7 @@ use tanglePHP\Core\Exception\Api as ApiException;
  * @package      tanglePHP\Core\Helper
  * @author       Stefan Braun <stefan.braun@tanglePHP.com>
  * @copyright    Copyright (c) 2022, StefanBraun
- * @version      2022.08.31-1652
+ * @version      2022.09.02-1530
  */
 final class ApiCaller {
   /**
@@ -41,9 +41,6 @@ final class ApiCaller {
    */
   protected array $settings = [
     'jsonException' => true,
-    'jsonData'      => 'data',
-    'jsonError'     => 'error',
-    'jsonCode'      => 'code',
   ];
 
   /**
@@ -283,7 +280,6 @@ final class ApiCaller {
     $content = $this->handle->getContent();
     if($content === null || !Converter::isJSON($content)) {
       if($this->settings['jsonException']) {
-
         if($error = $this->getHandleStatus()['_error']) {
           return JSON::create(['error' => $error]);
         }
